@@ -1,22 +1,32 @@
-import {Table, Column, Model} from 'sequelize-typescript'
+import {Table, Column, Model, Unique, Default, DataType} from 'sequelize-typescript'
 
 @Table
 export class User extends Model<User> {
+  @Unique
   @Column
   email: string
 
+  @Unique
   @Column
   username: string
 
   @Column
   password: string
 
-  @Column
+  @Column({
+    type: DataType.TEXT,
+  })
+  secret: string
+
+  @Column({
+    type: DataType.TEXT
+  })
   password_reset_token: string
 
   @Column
-  password_reset_expires: string
+  password_reset_expires: Date
 
+  @Default(false)
   @Column
   verified: boolean
 }

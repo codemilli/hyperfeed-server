@@ -3,6 +3,7 @@ import {Model} from "sequelize-typescript";
 import {User} from "./user.entity";
 import {CreateUserDto} from "./dto/create-user.dto";
 import {UsersRepository} from "./user.provider";
+import * as bcrypt from 'bcrypt'
 
 @Component()
 export class UserService {
@@ -10,15 +11,41 @@ export class UserService {
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const user = new User()
+    const {email, username, password} = createUserDto
+    const salt = await this.getSalt()
+    const hashed = await this.hashing(password, salt)
 
-    user.email = createUserDto.email
-    user.username = createUserDto.username
-    user.password = createUserDto.password
+    user.email = email
+    user.username = username
+    user.password = hashed
+    user.secret = salt
+    user.password_reset_token = ''
+    user.password_reset_expires = null
 
     return await user.save()
   }
 
   async findAll(): Promise<User[]> {
     return await this.userRepository.findAll<User>()
+  }
+
+  async getSalt():Promise<string> {
+    return await new Promise<string>((resolve, reject) => {
+      bcrypt.genSalt(10, (err, salt: string) => {
+        if (err)
+          return reject(err)
+        resolve(salt)
+      })
+    })
+  }
+
+  async hashing(password: string, salt: string): Promise<string> {
+    return await new Promise<string>((resolve, reject) => {
+      bcrypt.hash(password, salt, (err, hashed) => {
+        if (err)
+          return reject(err)
+        resolve(hashed)
+      })
+    })
   }
 }
