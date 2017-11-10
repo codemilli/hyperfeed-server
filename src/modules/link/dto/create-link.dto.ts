@@ -1,3 +1,3 @@
-export class CreateLinkDto {
+export interface CreateLinkDto {
   readonly url: string
 }

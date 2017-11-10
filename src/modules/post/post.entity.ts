@@ -7,11 +7,11 @@ export class Post extends Model<Post> {
 
   @ForeignKey(() => User)
   @Column
-  userId: number
+  user_id: number
 
   @ForeignKey(() => Link)
   @Column
-  linkId: number
+  link_id: number
 
   @Column
   title: string

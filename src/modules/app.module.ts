@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import {UserModule} from "./user/user.module";
-import {LinkModule} from "./link/link.module";
+import {PostModule} from "./post/post.module";
 
 @Module({
     modules: [
-      UserModule
+      UserModule,
+      PostModule
     ],
 })
 export class ApplicationModule {}

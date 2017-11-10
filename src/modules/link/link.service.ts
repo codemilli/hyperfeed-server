@@ -10,7 +10,7 @@ export class LinkService {
 
   async create(createLinkDto: CreateLinkDto): Promise<Link> {
     const link = new Link()
-    const {url} = createUserDto
+    const {url} = createLinkDto
 
     link.url = url
 
@@ -22,6 +22,6 @@ export class LinkService {
   }
 
   async findByUrl(url: string): Promise<Link> {
-    return await this.linksRepository.find<Link>({url})
+    return await this.linksRepository.findOne<Link>({where: {url}})
   }
 }
