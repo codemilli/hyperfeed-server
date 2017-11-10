@@ -22,9 +22,16 @@ export const databaseProviders = [
         username: ENV.DB_USER,
         password: ENV.DB_PASS,
         database: ENV.DB_NAME,
+        define: {
+          underscored: true,
+          charset: 'utf8',
+          collate: 'utf8_general_ci',
+          paranoid: true,
+          timestamps: true
+        }
       })
       sequelize.addModels([User])
-      await sequelize.sync({alter: true})
+      await sequelize.sync({alter: true, force: true})
       return sequelize
     }
   }
