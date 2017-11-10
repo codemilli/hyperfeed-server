@@ -1,11 +1,8 @@
 import {Table, Column, Model, ForeignKey} from 'sequelize-typescript'
 import {User} from "../user/user.entity";
-import {Link} from "./link.entity";
+import {Link} from "../link/link.entity";
 
-@Table({
-  timestamps: true,
-  underscored: true
-})
+@Table
 export class Post extends Model<Post> {
 
   @ForeignKey(() => User)
@@ -21,8 +18,4 @@ export class Post extends Model<Post> {
 
   @Column
   desc: string
-
-  @Column
-  deletedAt: Date
-
 }

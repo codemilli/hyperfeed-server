@@ -1,5 +1,5 @@
-import {Table, Column, Model, ForeignKey, IsUrl} from 'sequelize-typescript'
-import {Post} from "./post.entity";
+import {Table, Column, Model, IsUrl, HasMany} from 'sequelize-typescript'
+import {Post} from "../post/post.entity";
 
 @Table({
   timestamps: true,
