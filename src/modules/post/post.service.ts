@@ -13,7 +13,6 @@ export class PostService {
     const {user_id, url, title, desc} = createPostDto
 
     post.user_id = user_id
-    post.url = url
     post.title = title
     post.desc = desc
 
@@ -24,7 +23,7 @@ export class PostService {
     return await this.postsRepository.findById<Post>()
   }
 
-  async findByUserId(user_id: number | string): Promise<Link> {
-    return await this.postsRepository.findOne<Link>({where: {user_id}})
+  async findByUserId(user_id: number | string): Promise<Post> {
+    return await this.postsRepository.findOne<Post>({where: {user_id}})
   }
 }

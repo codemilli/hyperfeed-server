@@ -3,9 +3,9 @@ import {Post} from "../post/post.entity";
 
 @Table
 export class Link extends Model<Link> {
-  @HasMany(() => Post)
-  @Column
-  posts: Post[]
+  // @HasMany(() => Post)
+  // @Column
+  // posts: Post[]
 
   @IsUrl
   @Unique
