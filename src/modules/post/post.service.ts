@@ -19,6 +19,10 @@ export class PostService {
     return await post.save()
   }
 
+  async findAll(): Promise<Post[]> {
+    return await this.postsRepository.findAll<Post>()
+  }
+
   async findById(id: number | string): Promise<Post> {
     return await this.postsRepository.findById<Post>()
   }
