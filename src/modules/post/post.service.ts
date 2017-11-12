@@ -17,7 +17,7 @@ export class PostService {
     const {user_id, url, title, desc} = createPostDto
     const link = await this.linkService.findByUrlOrCreate(url)
 
-    post.user_id = user_id
+    post.user_id = Number(user_id)
     post.link_id = link.id
     post.title = title
     post.desc = desc
