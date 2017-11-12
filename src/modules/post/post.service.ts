@@ -4,6 +4,8 @@ import {Post} from "./post.entity";
 import {PostsRepository} from "./post.provider";
 import {CreatePostDto} from "./dto/create-post.dto";
 import {LinkService} from "../link/link.service";
+import {Link} from "../link/link.entity";
+import {User} from "../user/user.entity";
 
 @Component()
 export class PostService {
@@ -26,7 +28,9 @@ export class PostService {
   }
 
   async findAll(): Promise<Post[]> {
-    return await this.postsRepository.findAll<Post>()
+    return await this.postsRepository.findAll<Post>({
+      include: [User, Link]
+    })
   }
 
   async findById(id: number | string): Promise<Post> {

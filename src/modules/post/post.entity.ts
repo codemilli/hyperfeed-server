@@ -1,4 +1,4 @@
-import {Table, Column, Model, ForeignKey} from 'sequelize-typescript'
+import {Table, Column, Model, ForeignKey, BelongsTo} from 'sequelize-typescript'
 import {User} from "../user/user.entity";
 import {Link} from "../link/link.entity";
 
@@ -9,9 +9,15 @@ export class Post extends Model<Post> {
   @Column
   user_id: number
 
+  @BelongsTo(() => User)
+  user: User
+
   @ForeignKey(() => Link)
   @Column
   link_id: number
+
+  @BelongsTo(() => Link)
+  link: Link
 
   @Column
   title: string
