@@ -24,4 +24,14 @@ export class LinkService {
   async findByUrl(url: string): Promise<Link> {
     return await this.linksRepository.findOne<Link>({where: {url}})
   }
+
+  async findByUrlOrCreate(url: string): Promise<Link> {
+    let link = await this.findByUrl(url)
+
+    if (!link) {
+      link = await this.create({url})
+    }
+
+    return link
+  }
 }
