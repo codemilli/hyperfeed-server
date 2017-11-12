@@ -1,5 +1,8 @@
-import {Table, Column, Model, Unique, Default, DataType} from 'sequelize-typescript'
+import {Table, Column, Model, Unique, Default, DataType, DefaultScope} from 'sequelize-typescript'
 
+@DefaultScope({
+  attributes: ['id', 'email', 'username']
+})
 @Table
 export class User extends Model<User> {
   @Unique
