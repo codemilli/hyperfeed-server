@@ -19,6 +19,8 @@
     "bcrypt": "^1.0.3",
     "body-parser": "^1.18.2",
     "cors": "^2.8.4",
+    "express-mysql-session": "^1.2.2",
+    "express-session": "^1.15.6",
     "mysql2": "^1.4.2",
     "redis": "^2.7.1",
     "reflect-metadata": "^0.1.10",
