@@ -14,7 +14,8 @@ export class UserController {
   }
 
   @Get('/list')
-  async findAll(): Promise<User[]> {
+  async findAll(@Req() req): Promise<User[]> {
+    console.log('req', req.sessionID, req.session)
     return await this.userService.findAll()
   }
 }
