@@ -16,7 +16,7 @@ export class Session extends Model<Session> {
   user: User
 
   @Column
-  expires: string
+  expires: Date
 
   @Column({
     type: DataType.TEXT

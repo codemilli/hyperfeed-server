@@ -4,12 +4,15 @@ import {User} from "./user.entity";
 import {CreateUserDto} from "./dto/create-user.dto";
 import {UsersRepository} from "./user.provider";
 import * as bcrypt from 'bcrypt'
+import {AuthService} from "../auth/auth.service";
 
 @Component()
 export class UserService {
-  constructor(@Inject(UsersRepository) private readonly userRepository: typeof Model) {}
+  constructor(
+    @Inject(UsersRepository) private readonly userRepository: typeof Model,
+    private readonly authService: AuthService) {}
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
+  async create(createUserDto: CreateUserDto, useragent: string): Promise<Object> {
     const user = new User()
     const {email, username, password} = createUserDto
     const salt = await this.getSalt()
@@ -22,7 +25,12 @@ export class UserService {
     user.password_reset_token = ''
     user.password_reset_expires = null
 
-    return await user.save()
+    const newUser = await user.save()
+    const token = await this.authService.create(newUser.id, useragent)
+
+    return {
+      token
+    }
   }
 
   async findAll(): Promise<User[]> {

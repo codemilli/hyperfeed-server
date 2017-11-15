@@ -9,13 +9,12 @@ export class UserController {
 
   @Post()
   async create(@Req() req, @Body() createUserDto: CreateUserDto) {
-    const result = await this.userService.create(createUserDto)
+    const result = await this.userService.create(createUserDto, req.get('User-Agent'))
     return result
   }
 
   @Get('/list')
   async findAll(@Req() req): Promise<User[]> {
-    console.log('req', req.sessionID, req.session)
     return await this.userService.findAll()
   }
 }
