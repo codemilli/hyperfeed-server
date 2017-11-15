@@ -3,6 +3,7 @@ import {ENV} from '../../../config/env/development'
 import {User} from "../user/user.entity";
 import {Post} from "../post/post.entity";
 import {Link} from "../link/link.entity";
+import {Session} from "../auth/session/session.entity";
 
 const mysql = require('mysql2')
 const connection = mysql.createConnection({
@@ -32,7 +33,7 @@ export const databaseProviders = [
           timestamps: true
         }
       })
-      sequelize.addModels([User, Post, Link])
+      sequelize.addModels([User, Post, Link, Session])
       await sequelize.sync({alter: true, force: true})
       return sequelize
     }
