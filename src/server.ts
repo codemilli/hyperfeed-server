@@ -1,6 +1,7 @@
 import * as bodyParser from 'body-parser'
 import * as cors from 'cors'
 import * as session from 'express-session'
+import * as cookieParser from 'cookie-parser'
 // import * as mysqlSession from 'express-mysql-session'
 import {NestFactory} from '@nestjs/core'
 import {ApplicationModule} from './modules/app.module'
@@ -28,6 +29,7 @@ async function bootstrap() {
   const app = await NestFactory.create(ApplicationModule)
   app.use(bodyParser.urlencoded({extended: false}))
   app.use(bodyParser.json())
+  app.use(cookieParser())
   app.use(cors())
   // app.use(session({
   //   key: 'hf_sid',
@@ -38,7 +40,9 @@ async function bootstrap() {
   // }))
   app.use(session({
     secret: ENV.SECRET,
-    cookie: {maxAge: 60000}
+    name: 'hf.sid',
+    resave: true,
+    cookie: {maxAge: 14 * 24 * 60 * 60 * 1000}
   }))
   await app.listen(3100)
 }
