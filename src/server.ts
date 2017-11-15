@@ -38,12 +38,11 @@ async function bootstrap() {
   //   resave: false,
   //   saveUninitialized: false
   // }))
-  app.use(session({
-    secret: ENV.SECRET,
-    name: 'hf.sid',
-    resave: true,
-    cookie: {maxAge: 14 * 24 * 60 * 60 * 1000}
-  }))
+  // app.use(session({
+  //   secret: ENV.SESSION_SECRET,
+  //   name: ENV.SESSION_NAME,
+  //   cookie: {maxAge: 14 * 24 * 60 * 60 * 1000}
+  // }))
   await app.listen(3100)
 }
 
