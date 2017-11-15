@@ -6,6 +6,7 @@ import {CONST} from "../../infra/const";
 import {Session} from "./session/session.entity";
 import * as uuidv1 from 'uuid/v1'
 import {IAuthToken} from "./jwt/token.type";
+import {User} from "../user/user.entity";
 
 @Component()
 export class AuthService {
@@ -37,7 +38,10 @@ export class AuthService {
   }
 
   async verifySession(sid, user_id): Promise<any> {
-    const session = await this.sessionRepository.findOne<Session>({where: {sid, user_id}})
+    const session = await this.sessionRepository.findOne<Session>({
+      where: {sid, user_id},
+      include: [User]
+    })
 
     if (!session) {
       throw new Error("No session found")

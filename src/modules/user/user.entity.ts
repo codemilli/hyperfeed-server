@@ -13,6 +13,10 @@ export class User extends Model<User> {
   @Column
   username: string
 
+  @Default('user') // admin
+  @Column
+  role: string
+
   @Column
   password: string
 

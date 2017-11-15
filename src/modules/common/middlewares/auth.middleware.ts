@@ -2,7 +2,6 @@ import {Middleware} from "@nestjs/common";
 import {ExpressMiddleware, NestMiddleware} from "@nestjs/common/interfaces/middlewares";
 import {JWTService} from "../../auth/jwt/jwt.service";
 import {AuthService} from "../../auth/auth.service";
-import {IAuthToken} from "../../auth/jwt/token.type";
 
 @Middleware()
 export class AuthMiddleware implements NestMiddleware {
@@ -17,9 +16,9 @@ export class AuthMiddleware implements NestMiddleware {
       if (token) {
         const verified = await this.jwtService.verifyToken(token);
         const {sid, user_id, useragent} = verified
-        const onDB = await this.authService.verifySession(sid, user_id)
+        const session = await this.authService.verifySession(sid, user_id)
 
-        req._session = verified
+        req._session = session
         req._token = this.jwtService.createToken(sid, user_id, useragent)
 
         /** @Async <Never await this method> */
