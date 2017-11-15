@@ -35,4 +35,17 @@ export class AuthService {
       where: {sid, user_id}
     })
   }
+
+  async verifySession(sid, user_id): Promise<any> {
+    const session = await this.sessionRepository.findOne<Session>({where: {sid, user_id}})
+
+    if (!session) {
+      throw new Error("No session found")
+    }
+    if (new Date() > new Date(session.expires)) {
+      throw new Error("Session outdated")
+    }
+
+    return session
+  }
 }

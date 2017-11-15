@@ -12,18 +12,17 @@ export class AuthMiddleware implements NestMiddleware {
 
   resolve(...args: any[]): ExpressMiddleware {
     return async (req, res, next) => {
-      const token = req.headers['authorization']
+      const token = req.headers['hf-token']
 
       if (token) {
-        let verified: IAuthToken;
-
-        try {
-          verified = await this.jwtService.verifyToken(token)
-        } catch(e) {
-          throw e
-        }
+        const verified = await this.jwtService.verifyToken(token);
+        const {sid, user_id, useragent} = verified
+        const onDB = await this.authService.verifySession(sid, user_id)
 
         req._session = verified
+        req._token = this.jwtService.createToken(sid, user_id, useragent)
+
+        /** @Async <Never await this method> */
         this.authService.updateSession(verified)
       } else {
         req._session = null
