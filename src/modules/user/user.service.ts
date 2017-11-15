@@ -12,7 +12,7 @@ export class UserService {
     @Inject(UsersRepository) private readonly userRepository: typeof Model,
     private readonly authService: AuthService) {}
 
-  async create(createUserDto: CreateUserDto, useragent: string): Promise<Object> {
+  async create(createUserDto: CreateUserDto, useragent: string): Promise<object> {
     const user = new User()
     const {email, username, password} = createUserDto
     const salt = await this.getSalt()
@@ -26,7 +26,7 @@ export class UserService {
     user.password_reset_expires = null
 
     const newUser = await user.save()
-    const token = await this.authService.create(newUser.id, useragent)
+    const token = await this.authService.createSession(newUser.id, useragent)
 
     return {
       token

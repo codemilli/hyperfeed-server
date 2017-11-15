@@ -1,37 +1,30 @@
 import * as jwt from 'jsonwebtoken'
-import * as uuidv1 from 'uuid/v1'
-import {Component, Inject} from "@nestjs/common";
-import {Model} from "sequelize-typescript";
-import {SessionsRepository} from "../session/session.provider";
-import {Session} from "../session/session.entity";
+import {Component} from "@nestjs/common";
 import {ENV} from "../../../../config/env/development";
-
-const twoweek = 14 * 24 * 60 * 60 * 1000
+import {CONST} from "../../../infra/const";
+import {IAuthToken} from "./token.type";
 
 @Component()
 export class JWTService {
-  constructor(@Inject(SessionsRepository) private readonly sessionRepository: typeof Model) {}
 
-  async create(userId: number, useragent: string): Promise<string> {
-    const expires = Date.now() + twoweek
-    const session = new Session({
-      sid: uuidv1(),
-      user_id: userId,
-      expires: new Date(expires),
-      data: useragent
-    })
-
-    const newSess = await session.save()
+  createToken(sid: string, user_id: number, useragent: string): string {
     const token: string = jwt.sign({
-      sid: newSess.sid,
-      user_id: newSess.user_id,
+      sid,
+      user_id,
       useragent
-    }, ENV.SESSION_SECRET, {expiresIn: parseInt(String(twoweek / 1000))})
+    }, ENV.SESSION_SECRET, {expiresIn: parseInt(String(CONST.twoweeks / 1000))})
 
     return token
   }
 
-  async findOne(): Promise<Session> {
-    return await this.sessionRepository.findOne<Session>()
+  async verifyToken(token: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      jwt.verify(token, ENV.SESSION_SECRET, {},(err, decoded) => {
+        if (err)
+          return reject(err)
+
+        resolve(decoded)
+      })
+    })
   }
 }

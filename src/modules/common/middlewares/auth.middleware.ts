@@ -1,15 +1,33 @@
 import {Middleware} from "@nestjs/common";
 import {ExpressMiddleware, NestMiddleware} from "@nestjs/common/interfaces/middlewares";
-import {ENV} from "../../../../config/env/development";
+import {JWTService} from "../../auth/jwt/jwt.service";
+import {AuthService} from "../../auth/auth.service";
+import {IAuthToken} from "../../auth/jwt/token.type";
 
 @Middleware()
 export class AuthMiddleware implements NestMiddleware {
+  constructor(
+    private readonly jwtService: JWTService,
+    private readonly authService: AuthService) {}
+
   resolve(...args: any[]): ExpressMiddleware {
-    return (req, res, next) => {
-      const session = req.cookies[ENV.SESSION_NAME]
+    return async (req, res, next) => {
+      const token = req.headers['authorization']
 
-      console.log('session', session)
+      if (token) {
+        let verified: IAuthToken;
 
+        try {
+          verified = await this.jwtService.verifyToken(token)
+        } catch(e) {
+          throw e
+        }
+
+        req._session = verified
+        this.authService.updateSession(verified)
+      } else {
+        req._session = null
+      }
       next()
     }
   }
