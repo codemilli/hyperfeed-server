@@ -1,4 +1,4 @@
-import {Table, Column, Model, Unique, PrimaryKey, DataType, ForeignKey, BelongsTo} from 'sequelize-typescript'
+import {Table, Column, Model, Unique, PrimaryKey, DataType, ForeignKey, BelongsTo, Default} from 'sequelize-typescript'
 import {User} from "../../user/user.entity";
 
 @Table
@@ -14,6 +14,10 @@ export class Session extends Model<Session> {
 
   @BelongsTo(() => User)
   user: User
+
+  @Default(0)
+  @Column
+  refresh_times: number
 
   @Column
   expires: Date

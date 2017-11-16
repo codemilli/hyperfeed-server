@@ -23,7 +23,7 @@ export class AuthService {
       data: useragent
     })
     const newSess = await session.save()
-    const token = this.jwtService.createToken(newSess.sid, userId, useragent)
+    const token = this.jwtService.createToken(newSess.sid, userId, 1)
 
     return token
   }

@@ -7,11 +7,11 @@ import {IAuthToken} from "./token.type";
 @Component()
 export class JWTService {
 
-  createToken(sid: string, user_id: number, useragent: string): string {
+  createToken(sid: string, user_id: number, refreshed_times: number): string {
     const token: string = jwt.sign({
       sid,
       user_id,
-      useragent
+      refreshed_times
     }, ENV.SESSION_SECRET, {expiresIn: parseInt(String(CONST.twoweeks / 1000))})
 
     return token
