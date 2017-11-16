@@ -17,7 +17,7 @@ export class Session extends Model<Session> {
 
   @Default(0)
   @Column
-  refresh_times: number
+  refreshed_times: number
 
   @Column
   expires: Date

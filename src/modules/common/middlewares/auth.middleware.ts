@@ -18,13 +18,14 @@ export class AuthMiddleware implements NestMiddleware {
         const verified = await this.jwtService.verifyToken(token);
         const {sid, user_id, refreshed_times, iat} = verified
         const session = await this.authService.verifySession(sid, user_id)
+        const refreshed = refreshed_times + 1
 
         if (this.isTokenAfterNMin(iat) && this.isTooManyRefreshed(session, verified)) {
           throw new Error("Token was invalidated")
         }
 
         req._session = session
-        req._token = this.jwtService.createToken(sid, user_id, refreshed_times + 1)
+        req._token = this.jwtService.createToken(sid, user_id, refreshed)
 
         /** @Async <Never await this method> */
         this.authService.updateSession(verified)
@@ -37,12 +38,12 @@ export class AuthMiddleware implements NestMiddleware {
 
   isTokenAfterNMin(iat) {
     const before = Date.now() - ENV.SESSION_SHORT
-    const val = (new Date(iat)).valueOf()
+    const val = (new Date(iat * 1000)).valueOf()
 
     return val < before
   }
 
   isTooManyRefreshed(session, verified) {
-    return session.refresh_times - ENV.SESSION_SHORT_REFRESH_LIMIT >= verified.refresh_times
+    return session.refreshed_times - ENV.SESSION_SHORT_REFRESH_LIMIT >= verified.refreshed_times
   }
 }
