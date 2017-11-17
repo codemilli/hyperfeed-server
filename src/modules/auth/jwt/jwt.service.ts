@@ -12,7 +12,7 @@ export class JWTService {
       sid,
       user_id,
       refreshed_times
-    }, ENV.SESSION_SECRET, {expiresIn: parseInt(String(CONST.twoweeks / 1000))})
+    }, ENV.SESSION_SECRET, {expiresIn: parseInt(String(ENV.SESSION_LONG / 1000))})
 
     return token
   }
