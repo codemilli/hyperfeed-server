@@ -12,7 +12,7 @@ export class AuthMiddleware implements NestMiddleware {
 
   resolve(...args: any[]): ExpressMiddleware {
     return async (req, res, next) => {
-      const token = req.headers['hf-token']
+      const token = req.headers[ENV.SESSION_NAME]
 
       if (token) {
         const verified = await this.jwtService.verifyToken(token);
@@ -24,13 +24,13 @@ export class AuthMiddleware implements NestMiddleware {
           throw new Error("Token was invalidated")
         }
 
-        req._session = session
-        req._token = this.jwtService.createToken(sid, user_id, refreshed)
+        res._session = session
+        res._token = this.jwtService.createToken(sid, user_id, refreshed)
 
         /** @Async <Never await this method> */
         this.authService.updateSession(verified)
       } else {
-        req._session = null
+        res._session = null
       }
       next()
     }
