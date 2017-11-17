@@ -21,7 +21,7 @@ export class AuthService {
       sid: uuidv1(),
       user_id: userId,
       expires: new Date(expires),
-      data: useragent
+      useragent: useragent
     })
     const newSess = await session.save()
     const token = this.jwtService.createToken(newSess.sid, userId, 1)

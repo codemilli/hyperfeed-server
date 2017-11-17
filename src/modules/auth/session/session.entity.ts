@@ -26,4 +26,9 @@ export class Session extends Model<Session> {
     type: DataType.TEXT
   })
   data: string
+
+  @Column({
+    type: DataType.TEXT
+  })
+  useragent: string
 }

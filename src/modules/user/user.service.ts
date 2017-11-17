@@ -12,25 +12,31 @@ export class UserService {
     @Inject(UsersRepository) private readonly userRepository: typeof Model,
     private readonly authService: AuthService) {}
 
-  async create(createUserDto: CreateUserDto, useragent: string): Promise<object> {
-    const user = new User()
+  async create(createUserDto: CreateUserDto, useragent: string): Promise<any> {
+    let newUser = new User()
     const {email, username, password} = createUserDto
     const salt = await this.getSalt()
     const hashed = await this.hashing(password, salt)
 
-    user.email = email
-    user.username = username
-    user.password = hashed
-    user.secret = salt
-    user.password_reset_token = ''
-    user.password_reset_expires = null
+    newUser.email = email
+    newUser.username = username
+    newUser.password = hashed
+    newUser.secret = salt
+    newUser.password_reset_token = ''
+    newUser.password_reset_expires = null
+    newUser = await newUser.save()
 
-    const newUser = await user.save()
     const token = await this.authService.createSession(newUser.id, useragent)
+    const user = await this.findUserById(newUser.id)
 
     return {
+      user,
       token
     }
+  }
+
+  async findUserById(id: number): Promise<User> {
+    return await this.userRepository.findById<User>(id)
   }
 
   async findAll(): Promise<User[]> {
