@@ -10,14 +10,12 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  async create(@Req() req, @Res() res, @Body() createUserDto: CreateUserDto) {
+  async create(@Req() req, @Body() createUserDto: CreateUserDto) {
     const result = await this.userService.create(createUserDto, req.get('User-Agent'))
+    const {user, token} = result
 
-    res._token = result.token
-
-    console.log('result', result)
-
-    return result
+    req.res._token = token
+    return user
   }
 
   @Put()

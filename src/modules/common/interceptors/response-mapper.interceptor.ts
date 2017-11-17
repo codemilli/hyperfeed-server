@@ -3,7 +3,6 @@ import {NestInterceptor} from "@nestjs/common/interfaces/nest-interceptor.interf
 import {ExecutionContext} from "@nestjs/common/interfaces/execution-context.interface";
 import {Observable} from "rxjs/Observable";
 import "rxjs/add/operator/map";
-import "rxjs/add/observable/throw";
 
 @Interceptor()
 export class ResponseMapperInterceptor implements NestInterceptor {

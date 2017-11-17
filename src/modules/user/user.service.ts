@@ -24,10 +24,10 @@ export class UserService {
     newUser.secret = salt
     newUser.password_reset_token = ''
     newUser.password_reset_expires = null
-    newUser = await newUser.save()
 
-    const token = await this.authService.createSession(newUser.id, useragent)
-    const user = await this.findUserById(newUser.id)
+    const createdUser = await newUser.save()
+    const token = await this.authService.createSession(createdUser.id, useragent)
+    const user = await this.findUserById(createdUser.id)
 
     return {
       user,
