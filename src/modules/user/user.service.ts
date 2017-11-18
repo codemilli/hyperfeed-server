@@ -5,6 +5,7 @@ import {CreateUserDto} from "./dto/create-user.dto";
 import {UsersRepository} from "./user.provider";
 import * as bcrypt from 'bcrypt'
 import {AuthService} from "../auth/auth.service";
+import {LoginUserDto} from "./dto/login-user.dto";
 
 @Component()
 export class UserService {
@@ -35,8 +36,20 @@ export class UserService {
     }
   }
 
+  async login(loginUserDto: LoginUserDto, useragent: string): Promise<any> {
+    const user = await this.findUserByUsername(loginUserDto.username)
+  }
+
   async findUserById(id: number): Promise<User> {
     return await this.userRepository.findById<User>(id)
+  }
+
+  async findUserByUsername(username: string): Promise<User> {
+    return await this.userRepository.findOne<User>({
+      where: {
+        username
+      }
+    })
   }
 
   async findAll(): Promise<User[]> {
