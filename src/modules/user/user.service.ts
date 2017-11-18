@@ -36,8 +36,10 @@ export class UserService {
     }
   }
 
-  async login(loginUserDto: LoginUserDto, useragent: string): Promise<any> {
+  async login(loginUserDto: LoginUserDto): Promise<any> {
     const user = await this.findUserByUsername(loginUserDto.username)
+    console.log('user =>> ', user)
+    return user
   }
 
   async findUserById(id: number): Promise<User> {
@@ -45,7 +47,7 @@ export class UserService {
   }
 
   async findUserByUsername(username: string): Promise<User> {
-    return await this.userRepository.findOne<User>({
+    return await this.userRepository.scope('full').findOne<User>({
       where: {
         username
       }
