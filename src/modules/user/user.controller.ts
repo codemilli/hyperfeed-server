@@ -21,11 +21,11 @@ export class UserController {
 
   @Post('/login')
   async login(@Req() req, @Body() loginUserDto: LoginUserDto) {
-    const result = await this.userService.login(loginUserDto)
-    // const {user, token} = result
+    const result = await this.userService.login(loginUserDto, req.get('User-Agent'))
+    const {user, token} = result
 
-    // req.res._token = token
-    return result
+    req.res._token = token
+    return user
   }
 
   @Put()

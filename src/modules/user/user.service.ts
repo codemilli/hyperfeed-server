@@ -36,10 +36,22 @@ export class UserService {
     }
   }
 
-  async login(loginUserDto: LoginUserDto): Promise<any> {
+  async login(loginUserDto: LoginUserDto, useragent: string): Promise<any> {
     const user = await this.findUserByUsername(loginUserDto.username)
-    console.log('user =>> ', user)
-    return user
+    const {password} = user
+    const result = await bcrypt.compare(loginUserDto.password, password)
+
+    if (result) {
+      const token = await this.authService.createSession(user.id, useragent)
+      const foundUser = await this.findUserById(user.id)
+
+      return {
+        user: foundUser,
+        token
+      }
+    }
+
+    return null
   }
 
   async findUserById(id: number): Promise<User> {
